@@ -5,6 +5,12 @@ export default class Booking extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
+  @column.dateTime()
+  public play_date_start: DateTime
+
+  @column()
+  public play_date_end: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

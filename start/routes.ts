@@ -20,14 +20,14 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/venues', 'VenuesController.index')
-Route.get('/fields', 'VenuesController.store')
-Route.get('/venues/:id', 'VenuesController.show')
+Route.group(() => {
+    Route.resource('venues', 'VenuesController').apiOnly().middleware({
+        '*': ['auth'],
+    })
+    Route.resource('venues.fields', 'FieldsController').apiOnly().middleware({
+        '*': ['auth'],
+    })
+    Route.post('/login', 'AuthController.login').as('auth.login')
+    Route.post('/register', 'AuthController.register').as('auth.register')
+}).prefix('/api/v1')
 
-Route.post('/venues', 'VenuesController.store')
-
-Route.put('/venues/:id', 'VenuesController.update')
-
-Route.delete('/venues/:id', 'VenuesController.destroy')
-
-Route.resource('venues.fields', 'FieldsController').apiOnly()

@@ -1,5 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
+import Field from 'App/Models/Field'
+import Venue from 'App/Models/Venue'
 
 export default class FieldsController {
     //Mendapatkan semua data fields dari semua venue
@@ -30,12 +32,14 @@ export default class FieldsController {
 
     public async store({params, request, response}: HttpContextContract){
         try {
-            let newFieldId = await Database.table('fields').returning('id').insert({
-                name: request.input('name'),
-                type: request.input('type'),
-                venue_id: params.venue_id
-            })
-            response.created({message: 'created!', id: newFieldId})
+            let venue = await Venue.findByOrFail('id', params.venue_id)
+
+            let newField = new Field()
+            newField.name = request.input('name')
+            newField.type = request.input('type')
+            await newField.related('venue').associate(venue)
+
+            response.created({status: 'created!', data: newField})
         } catch (error) {
             response.badRequest({errors: error})
         }

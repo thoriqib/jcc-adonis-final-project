@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
 import CreateVenueValidator from 'App/Validators/CreateVenueValidator'
+import Venue from 'App/Models/Venue'
 
 export default class VenuesController {
     public async index({response}: HttpContextContract){
@@ -31,9 +32,9 @@ export default class VenuesController {
 
     public async show({params, response}: HttpContextContract){
         try {
-            const venue = await Database.from('venues').where('id', params.id).select('*').firstOrFail()
+            const venue = await Venue.query().where('id', params.id).preload('fields').first()
             response.status(200).json({
-                message: 'success get venues',
+                status: 'success get venues',
                 data: venue
             })
         } catch (error) {
@@ -44,7 +45,7 @@ export default class VenuesController {
     public async update({params, request, response}: HttpContextContract){
         try {
             let id = params.id
-            let affectedRows = await Database.from('venues').where('id', id).update({
+            let affectedRows = await Venue.updateOrCreate({id}, {
                 name: request.input('name'),
                 address: request.input('address'),
                 phone: request.input('phone')
@@ -57,8 +58,8 @@ export default class VenuesController {
 
     public async destroy({params, response}: HttpContextContract){
         try {
-            let id = params.id
-            await Database.from('venues').where('id', id).delete()
+            let venue = await Venue.findByOrFail('id', params.id)
+            await venue.delete()
             response.ok({message: 'deleted!'})
         } catch (error) {
             response.badRequest({errors: error})
