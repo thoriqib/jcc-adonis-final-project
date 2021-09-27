@@ -21,6 +21,9 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
+    Route.get('/', async ({ view }) => {
+        return view.render('home')
+    })      
     Route.resource('venues', 'VenuesController').apiOnly().middleware({
         '*': ['auth', 'verify', 'authorization'],
     })
