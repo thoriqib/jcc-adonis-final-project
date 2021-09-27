@@ -1,7 +1,7 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class CreateBookingValidator {
+export default class FormBookingValidator {
   constructor (protected ctx: HttpContextContract) {
   }
 
@@ -25,16 +25,12 @@ export default class CreateBookingValidator {
 	 *    ```
 	 */
   public schema = schema.create({
-	user_name: schema.string({trim: true}, [
-		rules.alpha(),
-		rules.minLength(2)
-	]),
-	venue_name: schema.string({trim: true},[
-		rules.minLength(3),
-	]),
-	datetime: schema.date({format: 'yyyy-MM-dd HH:mm:ss'}, [
-		rules.after(1, 'days')
-	])
+	  play_date_start: schema.date({}, [
+		  rules.after('today')
+	  ]),
+	  play_date_end: schema.date({}, [
+		  rules.after('today')
+	  ])
   })
 
 	/**
@@ -48,6 +44,5 @@ export default class CreateBookingValidator {
 	 * }
 	 *
 	 */
-  public messages = {
-  }
+  public messages = {}
 }

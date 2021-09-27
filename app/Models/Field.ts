@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Venue from 'App/Models/Venue'
+import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import Venue from './Venue'
+import Booking from './Booking'
 
 export default class Field extends BaseModel {
 
@@ -24,4 +25,7 @@ export default class Field extends BaseModel {
 
   @belongsTo(() => Venue)
   public venue: BelongsTo<typeof Venue>
+
+  @hasMany(() => Booking)
+  public bookings: HasMany<typeof Booking>
 }

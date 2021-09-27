@@ -9,12 +9,13 @@ export default class UsersSchema extends BaseSchema {
       table.string('name').notNullable()
       table.string('email', 255).notNullable()
       table.string('password', 180).notNullable()
+      table.boolean('is_verified').defaultTo(false)
       table.string('remember_me_token').nullable()
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.timestamps(true)
+      table.timestamps(true, true)
     })
   }
 

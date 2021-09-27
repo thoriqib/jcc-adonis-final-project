@@ -13,7 +13,6 @@ export default class Fields extends BaseSchema {
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
       table.timestamps(true, true)
-      table.foreign('venue_id').references('id').inTable('venues')
     })
   }
 

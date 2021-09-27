@@ -47,11 +47,11 @@ export default class FieldsController {
 
     public async show({params, response}: HttpContextContract){
         try {
-            const field = await Database.from('fields').where('id', params.id).select('*').firstOrFail()
-            response.status(200).json({
-                message: 'success get fields',
-                data: field
-            })
+            const field = await Field.query().where('id', params.id).preload('bookings', (bookingQuery) => {
+                bookingQuery.select(['title', 'play_date_start', 'play_date_end'])
+              }).firstOrFail()
+          
+            return response.ok({status: 'success', data: field})
         } catch (error) {
             response.badRequest({errors: error})
         }

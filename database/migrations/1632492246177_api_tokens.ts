@@ -14,7 +14,7 @@ export default class ApiTokens extends BaseSchema {
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.timestamps(true)
+      table.timestamps(true, true)
     })
   }
 

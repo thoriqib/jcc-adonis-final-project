@@ -4,7 +4,12 @@ import {
   column,
   beforeSave,
   BaseModel,
+  hasMany,
+  HasMany,
+  manyToMany,
+  ManyToMany
 } from '@ioc:Adonis/Lucid/Orm'
+import Booking from './Booking'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -18,6 +23,9 @@ export default class User extends BaseModel {
 
   @column({ serializeAs: null })
   public password: string
+
+  @column()
+  public isVerified: boolean
 
   @column()
   public rememberMeToken?: string
@@ -34,4 +42,10 @@ export default class User extends BaseModel {
       user.password = await Hash.make(user.password)
     }
   }
+
+  @hasMany(() => Booking)
+  public myBookings: HasMany<typeof Booking>
+
+  @manyToMany(() => Booking)
+  public players: ManyToMany<typeof Booking>
 }
