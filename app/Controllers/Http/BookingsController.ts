@@ -50,4 +50,14 @@ export default class BookingsController {
     }
     return response.ok({status: 'success', message: 'successfully join/unjoin'})
   }
+
+  public async get_schedules({response}: HttpContextContract){
+    try {
+      const data = await Database.from('schedules')
+  
+      return response.ok({status: 'success', data})
+    } catch (error) {
+      return response.badRequest({status: 'failed'})
+    }
+  }
 }

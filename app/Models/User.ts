@@ -28,6 +28,9 @@ export default class User extends BaseModel {
   public isVerified: boolean
 
   @column()
+  public role: string
+
+  @column()
   public rememberMeToken?: string
 
   @column.dateTime({ autoCreate: true })
