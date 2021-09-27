@@ -4,6 +4,20 @@ import CreateVenueValidator from 'App/Validators/CreateVenueValidator'
 import Venue from 'App/Models/Venue'
 
 export default class VenuesController {
+    /**
+     * @swagger
+     *   /api/v1/venues:
+     *   get:
+     *      security:
+     *          - bearerAuth: []
+     *      tags:
+     *          - Venues
+     *      responses:
+     *       200:
+     *          description: 'Will send `Venues`'
+     *       401: 
+     *          description: 'You do not have necessary permissions for the resource'
+     */
     public async index({response}: HttpContextContract){
         try {
             const venues = await Database.from('venues').select('*')
@@ -16,6 +30,41 @@ export default class VenuesController {
         }
     }
 
+    /**
+     * 
+     * @swagger
+     * /api/v1/venues:
+     *  post:
+     *      security:
+     *          - bearerAuth: []
+     *      tags:
+     *           - Venues
+     *      requestBody:
+     *          description: Data venue baru yang akan ditambahkan
+     *          content:
+     *          application/json:
+     *              schema:
+     *              required:
+     *                  - name
+     *                  - address
+     *                  - phone
+     *              type: object
+     *              properties:
+     *               name:
+     *                  type: string
+     *                  example: Gelora Bung Karno
+     *               address:
+     *                  type: string
+     *                  example: Jl. Sesama No. 5 - Suka Hati Kecamatan Sirnasari, Tanjung Harapan
+     *               phone:
+     *                  type: string
+     *                  example: "+6285123456789"
+     *          responses:
+     *              200:
+     *                  description: 'Berhasil membuat venue'
+     *              401: 
+     *                  description: 'You do not have necessary permissions for the resource'
+     */
     public async store({request, response}: HttpContextContract){
         try {
             await request.validate(CreateVenueValidator)
@@ -29,6 +78,26 @@ export default class VenuesController {
             response.badRequest({errors: error})
         }
     }
+
+    /**
+     * @swagger
+     *   /api/v1/venues/:id:
+     *   get:
+     *      security:
+     *          - bearerAuth: []
+     *      tags:
+     *          - Venues
+     *      parameters:
+     *       - name: Id
+     *         description: Venue Id
+     *         required: true
+     *         type: integer
+     *      responses:
+     *         200:
+     *          description: 'Will send `Venues` by id'
+     *         401: 
+     *          description: 'You do not have necessary permissions for the resource'
+     */
 
     public async show({params, response}: HttpContextContract){
         try {
